@@ -1,7 +1,6 @@
 import { ContactsController } from "../controllers";
 import { Router } from "express";
 
-console.log("estou aqui 2");
 const router = Router();
 
 router

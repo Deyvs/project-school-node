@@ -1,15 +1,15 @@
 import express from "express";
 import cors from "cors";
+import "dotenv/config";
 import routes from "./routes";
-require("dotenv").config();
-import contactsRouter from "./routes";
+import { connectDB } from "./config/db.cnonnection";
 
 const app = express();
-const port = process.env.PORT;
+const port = process.env.PORT || 3000;
 
+connectDB();
 app.use(cors());
 app.use(express.json());
-console.log("estou aqui 0");
 app.use(routes);
 
 app.listen(port, () => {
