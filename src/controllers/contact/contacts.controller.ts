@@ -1,6 +1,10 @@
 import { Request, Response } from "express";
 import ContactService from "../../services/contact.service";
-import { BadRequestError, NotFoundError } from "../../helpers/api.errors";
+import {
+  BadRequestError,
+  NotFoundError,
+  UnauthorizedError,
+} from "../../helpers/api.errors";
 
 export const getContacts = async (req: Request, res: Response) => {
   const { _id: id } = (<any>req).user;
@@ -16,10 +20,14 @@ export const getContacts = async (req: Request, res: Response) => {
 
 export const getContactById = async (req: Request, res: Response) => {
   const contact = await ContactService.getById(req.params.id);
-  console.log(contact);
 
   if (!contact) {
     throw new NotFoundError("Contact not found!");
+  }
+
+  const { _id: id } = (<any>req).user;
+  if (contact.user_id.toString() !== id) {
+    throw new UnauthorizedError("Access denied!");
   }
 
   res.status(200).json({
@@ -32,6 +40,7 @@ export const getContactById = async (req: Request, res: Response) => {
 
 export const createContact = async (req: Request, res: Response) => {
   const { name, email, phone } = req.body;
+
   const { _id: id } = (<any>req).user;
   if (!name || !email || !phone) {
     throw new BadRequestError("All fields are mandatory");
@@ -53,6 +62,11 @@ export const updateContact = async (req: Request, res: Response) => {
     throw new NotFoundError("Contact not found!");
   }
 
+  const { _id: id } = (<any>req).user;
+  if (contact.user_id.toString() !== id) {
+    throw new UnauthorizedError("Access denied!");
+  }
+
   await ContactService.update(req.params.id, req.body);
   const contactUpdated = await ContactService.getById(req.params.id);
   res.status(200).json({
@@ -68,6 +82,11 @@ export const deleteContact = async (req: Request, res: Response) => {
 
   if (!contact) {
     throw new NotFoundError("Contact not found!");
+  }
+
+  const { _id: id } = (<any>req).user;
+  if (contact.user_id.toString() !== id) {
+    throw new UnauthorizedError("Access denied!");
   }
 
   await ContactService.delete(req.params.id);
