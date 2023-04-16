@@ -1,4 +1,4 @@
-import { errorMiddleware } from "./middleware/error.handler";
+import { errorMiddleware } from "./middlewares/error.handler";
 import express from "express";
 import cors from "cors";
 import "dotenv/config";
