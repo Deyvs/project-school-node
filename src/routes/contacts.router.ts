@@ -1,7 +1,10 @@
 import { ContactsController } from "../controllers";
 import { Router } from "express";
+import validateToken from "../middleware/validation.token.handler";
 
 const router = Router();
+
+router.use(validateToken);
 
 router
   .route("/")

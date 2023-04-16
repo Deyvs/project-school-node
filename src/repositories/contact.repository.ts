@@ -1,8 +1,8 @@
 import { Contact } from "./../models/contact.model";
 
 class ContactRepository {
-  getAll() {
-    return Contact.find();
+  getAll(user_id: string) {
+    return Contact.find({ user_id: user_id });
   }
 
   getById(id: string) {

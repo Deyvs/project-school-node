@@ -1,3 +1,4 @@
+import { errorMiddleware } from "./middleware/error.handler";
 import express from "express";
 import cors from "cors";
 import "dotenv/config";
@@ -12,6 +13,7 @@ app.use(cors());
 app.use(express.json());
 app.use(routes);
 
+app.use(errorMiddleware);
 app.listen(port, () => {
   console.log(`Server running on port: ${port}`);
 });
