@@ -16,9 +16,9 @@ class UserService {
   }
 
   async create(user: IUser) {
-    const userAvailable = UserRepository.getByEmail(user.email);
+    const userAvailable = await UserRepository.getByEmail(user.email);
 
-    if (!userAvailable) {
+    if (userAvailable) {
       throw new BadRequestError("Email already registered!");
     }
 
