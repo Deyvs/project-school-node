@@ -1,4 +1,4 @@
-import { Contact } from "../models/contact.model";
+import { Contact, IContact } from "../models/contact.model";
 import ContactRepository from "../repositories/contact.repository";
 
 class ContactService {
@@ -10,7 +10,7 @@ class ContactService {
     return ContactRepository.getById(id);
   }
 
-  create(contact: typeof Contact) {
+  create(contact: IContact) {
     return ContactRepository.create(contact);
   }
 

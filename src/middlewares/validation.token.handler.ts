@@ -4,7 +4,10 @@ import jwt from "jsonwebtoken";
 import { UnauthorizedError } from "../helpers/api.errors";
 
 export interface ICustomRequest extends Request {
-  decoded: string;
+  user: {
+    _id: string;
+    email: string;
+  };
 }
 
 const secretJWT = process.env.JWT_SECRET_KEY || "";
@@ -20,22 +23,25 @@ const validateToken = asyncHandler(
 
     if (authHeader && authHeader.startsWith("Bearer")) {
       token = authHeader.split(" ")[1];
-      jwt.verify(token, secretJWT, (err, decoded) => {
-        if (err) {
-          throw new UnauthorizedError("Access denied!");
-        }
-        (<any>req).user = {
-          _id: (<any>decoded)._id,
-          email: (<any>decoded).email,
-        };
-        next();
-      });
 
       if (!token) {
         throw new UnauthorizedError(
           "User is not authorized or token is missing"
         );
       }
+
+      const userAuth = jwt.verify(token, secretJWT);
+
+      if (!userAuth) {
+        throw new UnauthorizedError("User is not authorized!");
+      }
+
+      req.user = (<any>userAuth).token;
+      next();
+    }
+
+    if (!token) {
+      throw new UnauthorizedError("User is not authorized or token is missing");
     }
   }
 );

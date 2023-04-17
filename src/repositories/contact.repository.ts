@@ -1,4 +1,4 @@
-import { Contact } from "./../models/contact.model";
+import { Contact, IContact } from "./../models/contact.model";
 
 class ContactRepository {
   getAll(user_id: string) {
@@ -9,8 +9,10 @@ class ContactRepository {
     return Contact.findById(id);
   }
 
-  create(contact: typeof Contact) {
-    return Contact.create(contact);
+  create(contact: IContact) {
+    Contact.create(contact);
+    const { email } = contact;
+    return Contact.findOne({ email });
   }
 
   update(id: string, contact: Partial<typeof Contact>) {

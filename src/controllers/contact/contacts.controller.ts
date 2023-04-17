@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import ContactService from "../../services/contact.service";
+
 import {
   BadRequestError,
   NotFoundError,
@@ -25,7 +26,7 @@ export const getContactById = async (req: Request, res: Response) => {
     throw new NotFoundError("Contact not found!");
   }
 
-  const { _id: id } = (<any>req).user;
+  const { _id: id } = req.user;
   if (contact.user_id.toString() !== id) {
     throw new UnauthorizedError("Access denied!");
   }
@@ -41,12 +42,12 @@ export const getContactById = async (req: Request, res: Response) => {
 export const createContact = async (req: Request, res: Response) => {
   const { name, email, phone } = req.body;
 
-  const { _id: id } = (<any>req).user;
+  const { _id: id } = req.user;
   if (!name || !email || !phone) {
     throw new BadRequestError("All fields are mandatory");
   }
 
-  const contact = ContactService.create({ ...req.body, user_id: id });
+  const contact = await ContactService.create({ ...req.body, user_id: id });
   res.status(201).json({
     status: res.statusCode,
     data: {
@@ -62,7 +63,7 @@ export const updateContact = async (req: Request, res: Response) => {
     throw new NotFoundError("Contact not found!");
   }
 
-  const { _id: id } = (<any>req).user;
+  const { _id: id } = req.user;
   if (contact.user_id.toString() !== id) {
     throw new UnauthorizedError("Access denied!");
   }
@@ -84,7 +85,7 @@ export const deleteContact = async (req: Request, res: Response) => {
     throw new NotFoundError("Contact not found!");
   }
 
-  const { _id: id } = (<any>req).user;
+  const { _id: id } = req.user;
   if (contact.user_id.toString() !== id) {
     throw new UnauthorizedError("Access denied!");
   }
