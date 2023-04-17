@@ -3,13 +3,6 @@ import asyncHandler from "express-async-handler";
 import jwt from "jsonwebtoken";
 import { UnauthorizedError } from "../helpers/api.errors";
 
-export interface ICustomRequest extends Request {
-  user: {
-    _id: string;
-    email: string;
-  };
-}
-
 const secretJWT = process.env.JWT_SECRET_KEY || "";
 
 const validateToken = asyncHandler(
@@ -37,6 +30,7 @@ const validateToken = asyncHandler(
       }
 
       req.user = (<any>userAuth).token;
+
       next();
     }
 
