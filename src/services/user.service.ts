@@ -25,7 +25,9 @@ class UserService {
     if (user.password) {
       user.password = await bcrypt.hash(user.password, 10);
     }
+
     const userCreated = await UserRepository.create(user);
+
     return {
       id: userCreated?.id,
       username: userCreated?.username,

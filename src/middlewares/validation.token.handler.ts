@@ -16,22 +16,20 @@ const validateToken = asyncHandler(
 
     if (authHeader && authHeader.startsWith("Bearer")) {
       token = authHeader.split(" ")[1];
-
       if (!token) {
         throw new UnauthorizedError(
           "User is not authorized or token is missing"
         );
       }
 
-      const userAuth = jwt.verify(token, secretJWT);
+      jwt.verify(token, secretJWT, function (err, decoded) {
+        if (err) {
+          throw new UnauthorizedError("Failed to authenticate token.");
+        }
 
-      if (!userAuth) {
-        throw new UnauthorizedError("User is not authorized!");
-      }
-
-      req.user = (<any>userAuth).token;
-
-      next();
+        req.user = (<any>decoded).token;
+        next();
+      });
     }
 
     if (!token) {

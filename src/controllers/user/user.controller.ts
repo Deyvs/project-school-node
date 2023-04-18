@@ -36,80 +36,21 @@ export const loginUser = async (req: Request, res: Response) => {
   });
 };
 
-export const currentUser = async (req: Request, res: Response) => {
-  res.json((<any>req).user);
+export const updateUser = async (req: Request, res: Response) => {
+  const { user_id } = req.params;
+  const UserUpdated = await UserService.update(user_id, req.body);
+  res.status(200).json({
+    status: res.statusCode,
+    data: {
+      UserUpdated,
+    },
+  });
 };
 
-// export const getUsers = async (req: Request, res: Response) => {
-//   const Users = await UserService.getAll();
-//   res.status(200).json({
-//     status: res.statusCode,
-//     length: Users.length,
-//     data: {
-//       Users,
-//     },
-//   });
-// };
-
-// export const getUserById = async (req: Request, res: Response) => {
-//   const User = await UserService.getById(req.params.id);
-//   console.log(User);
-
-//   if (!User) {
-//     throw new NotFoundError("User not found!");
-//   }
-
-//   res.status(200).json({
-//     status: res.statusCode,
-//     data: {
-//       User,
-//     },
-//   });
-// };
-
-// export const createUser = async (req: Request, res: Response) => {
-//   const { name, email, password } = req.body;
-
-//   if (!name || !email || !password) {
-//     throw new BadRequestError("All fields are mandatory");
-//   }
-
-//   const User = UserService.create(req.body);
-//   res.status(201).json({
-//     status: res.statusCode,
-//     data: {
-//       User,
-//     },
-//   });
-// };
-
-// export const updateUser = async (req: Request, res: Response) => {
-//   const User = await UserService.getById(req.params.id);
-//   console.log(User);
-
-//   if (!User) {
-//     throw new NotFoundError("User not found!");
-//   }
-
-//   await UserService.update(req.params.id, req.body);
-//   const UserUpdated = await UserService.getById(req.params.id);
-//   res.status(200).json({
-//     status: res.statusCode,
-//     data: {
-//       UserUpdated,
-//     },
-//   });
-// };
-
-// export const deleteUser = async (req: Request, res: Response) => {
-//   const User = await UserService.getById(req.params.id);
-//   console.log(User);
-
-//   if (!User) {
-//     throw new NotFoundError("User not found!");
-//   }
-//   await UserService.delete(req.params.id);
-//   res.status(200).json({
-//     message: "Delete User!",
-//   });
-// };
+export const deleteUser = async (req: Request, res: Response) => {
+  const id: string = req.params.user_id;
+  await UserService.delete(id);
+  res.status(200).json({
+    message: "Deleted User!",
+  });
+};

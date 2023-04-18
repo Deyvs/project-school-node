@@ -7,7 +7,8 @@ class ContactService {
   }
 
   getById(id: string) {
-    return ContactRepository.getById(id);
+    const contact = ContactRepository.getById(id);
+    return contact;
   }
 
   create(contact: IContact) {

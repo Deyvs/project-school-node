@@ -8,8 +8,8 @@ import {
 } from "../../helpers/api.errors";
 
 export const getContacts = async (req: Request, res: Response) => {
-  const { _id: id } = (<any>req).user;
-  const contacts = await ContactService.getAll(id);
+  const { user_id } = req.params;
+  const contacts = await ContactService.getAll(user_id);
   res.status(200).json({
     status: res.statusCode,
     length: contacts.length,
@@ -20,15 +20,20 @@ export const getContacts = async (req: Request, res: Response) => {
 };
 
 export const getContactById = async (req: Request, res: Response) => {
-  const contact = await ContactService.getById(req.params.id);
+  const { user_id, contact_id } = req.params;
+  let contact;
+  try {
+    contact = await ContactService.getById(contact_id);
+  } catch (error: any) {
+    throw new BadRequestError("Contact_id is not valid!");
+  }
 
   if (!contact) {
     throw new NotFoundError("Contact not found!");
   }
 
-  const { _id: id } = req.user;
-  if (contact.user_id.toString() !== id) {
-    throw new UnauthorizedError("Access denied!");
+  if (contact.user_id.toString() !== user_id) {
+    throw new NotFoundError("Contact not found!");
   }
 
   res.status(200).json({
@@ -41,13 +46,20 @@ export const getContactById = async (req: Request, res: Response) => {
 
 export const createContact = async (req: Request, res: Response) => {
   const { name, email, phone } = req.body;
+  const { user_id } = req.params;
 
-  const { _id: id } = req.user;
   if (!name || !email || !phone) {
     throw new BadRequestError("All fields are mandatory");
   }
 
-  const contact = await ContactService.create({ ...req.body, user_id: id });
+  if (!req.user) {
+    throw new UnauthorizedError("User don't have permission to upadate!");
+  }
+
+  const contact = await ContactService.create({
+    ...req.body,
+    user_id: user_id,
+  });
   res.status(201).json({
     status: res.statusCode,
     data: {
@@ -57,19 +69,24 @@ export const createContact = async (req: Request, res: Response) => {
 };
 
 export const updateContact = async (req: Request, res: Response) => {
-  const contact = await ContactService.getById(req.params.id);
+  const { user_id, contact_id } = req.params;
+  let contact;
+  try {
+    contact = await ContactService.getById(contact_id);
+  } catch (error: any) {
+    throw new BadRequestError("Contact_id is not valid!");
+  }
 
   if (!contact) {
     throw new NotFoundError("Contact not found!");
   }
 
-  const { _id: id } = req.user;
-  if (contact.user_id.toString() !== id) {
+  if (contact.user_id.toString() !== user_id) {
     throw new UnauthorizedError("Access denied!");
   }
 
-  await ContactService.update(req.params.id, req.body);
-  const contactUpdated = await ContactService.getById(req.params.id);
+  await ContactService.update(req.params.contact_id, req.body);
+  const contactUpdated = await ContactService.getById(req.params.contact_id);
   res.status(200).json({
     status: res.statusCode,
     data: {
@@ -79,19 +96,23 @@ export const updateContact = async (req: Request, res: Response) => {
 };
 
 export const deleteContact = async (req: Request, res: Response) => {
-  const contact = await ContactService.getById(req.params.id);
-
+  const { user_id, contact_id } = req.params;
+  let contact;
+  try {
+    contact = await ContactService.getById(contact_id);
+  } catch (error: any) {
+    throw new BadRequestError("Contact_id is not valid!");
+  }
   if (!contact) {
     throw new NotFoundError("Contact not found!");
   }
 
-  const { _id: id } = req.user;
-  if (contact.user_id.toString() !== id) {
+  if (contact.user_id.toString() !== user_id) {
     throw new UnauthorizedError("Access denied!");
   }
 
-  await ContactService.delete(req.params.id);
+  await ContactService.delete(req.params.contact_id);
   res.status(200).json({
-    message: "Delete contact!",
+    message: "Deleted contact!",
   });
 };
