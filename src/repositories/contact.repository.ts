@@ -5,22 +5,20 @@ class ContactRepository {
     return Contact.find({ user_id: user_id });
   }
 
-  getById(id: string) {
-    return Contact.findById(id);
+  getById(contact_id: string) {
+    return Contact.findById(contact_id);
   }
 
   create(contact: IContact) {
-    Contact.create(contact);
-    const { email } = contact;
-    return Contact.findOne({ email });
+    return Contact.create(contact);
   }
 
-  update(id: string, contact: Partial<typeof Contact>) {
-    return Contact.findByIdAndUpdate(id, contact);
+  update(contact_id: string, contact: Partial<typeof Contact>) {
+    return Contact.findByIdAndUpdate(contact_id, contact);
   }
 
-  delete(id: string) {
-    return Contact.findByIdAndDelete(id);
+  delete(contact_id: string) {
+    return Contact.findByIdAndDelete(contact_id);
   }
 }
 

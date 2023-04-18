@@ -27,7 +27,6 @@ const validateToken = asyncHandler(
           throw new UnauthorizedError("Failed to authenticate token.");
         }
 
-        req.user = (<any>decoded).token;
         next();
       });
     }

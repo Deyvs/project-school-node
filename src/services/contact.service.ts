@@ -2,12 +2,12 @@ import { Contact, IContact } from "../models/contact.model";
 import ContactRepository from "../repositories/contact.repository";
 
 class ContactService {
-  getAll(id: string) {
-    return ContactRepository.getAll(id);
+  getAll(user_id: string) {
+    return ContactRepository.getAll(user_id);
   }
 
-  getById(id: string) {
-    const contact = ContactRepository.getById(id);
+  getById(contact_id: string) {
+    const contact = ContactRepository.getById(contact_id);
     return contact;
   }
 
@@ -15,12 +15,12 @@ class ContactService {
     return ContactRepository.create(contact);
   }
 
-  update(id: string, contact: Partial<typeof Contact>) {
-    return ContactRepository.update(id, contact);
+  update(contact_id: string, contact: Partial<typeof Contact>) {
+    return ContactRepository.update(contact_id, contact);
   }
 
-  delete(id: string) {
-    return ContactRepository.delete(id);
+  delete(contact_id: string) {
+    return ContactRepository.delete(contact_id);
   }
 }
 

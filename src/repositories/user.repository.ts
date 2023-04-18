@@ -1,8 +1,8 @@
 import { IUser, User } from "./../models/user.model";
 
 class UserRepository {
-  getAll() {
-    return User.find();
+  getById(user_id: string) {
+    return User.findById(user_id);
   }
 
   getByEmail(email: string) {
@@ -10,17 +10,15 @@ class UserRepository {
   }
 
   create(user: IUser) {
-    const { email } = user;
-    User.create(user);
-    return User.findOne({ email });
+    return User.create(user);
   }
 
-  update(id: string, user: Partial<typeof User>) {
-    return User.findByIdAndUpdate(id, user);
+  update(user_id: string, user: Partial<typeof User>) {
+    return User.findByIdAndUpdate(user_id, user);
   }
 
-  delete(id: string) {
-    return User.findByIdAndDelete(id);
+  delete(user_id: string) {
+    return User.findByIdAndDelete(user_id);
   }
 }
 

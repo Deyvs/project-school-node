@@ -6,15 +6,29 @@ import {
   NotFoundError,
   UnauthorizedError,
 } from "../../helpers/api.errors";
+import UserService from "../../services/user.service";
 
 export const getContacts = async (req: Request, res: Response) => {
   const { user_id } = req.params;
+  const user = await UserService.getById(user_id);
+
+  if (!user) {
+    throw new NotFoundError("User not found!");
+  }
   const contacts = await ContactService.getAll(user_id);
+  const userResponse = {
+    user_id: user_id,
+    username: user.username,
+    email: user.email,
+    contacts: [...contacts],
+    createdAt: user.createdAt,
+    updateAt: user.updatedAt,
+  };
   res.status(200).json({
     status: res.statusCode,
     length: contacts.length,
     data: {
-      contacts,
+      ...userResponse,
     },
   });
 };
@@ -52,9 +66,9 @@ export const createContact = async (req: Request, res: Response) => {
     throw new BadRequestError("All fields are mandatory");
   }
 
-  if (!req.user) {
-    throw new UnauthorizedError("User don't have permission to upadate!");
-  }
+  // if (!req.user) {
+  //   throw new UnauthorizedError("User don't have permission to upadate!");
+  // }
 
   const contact = await ContactService.create({
     ...req.body,
@@ -63,7 +77,7 @@ export const createContact = async (req: Request, res: Response) => {
   res.status(201).json({
     status: res.statusCode,
     data: {
-      contact,
+      message: "Created contact!",
     },
   });
 };
@@ -86,11 +100,10 @@ export const updateContact = async (req: Request, res: Response) => {
   }
 
   await ContactService.update(req.params.contact_id, req.body);
-  const contactUpdated = await ContactService.getById(req.params.contact_id);
   res.status(200).json({
     status: res.statusCode,
     data: {
-      contactUpdated,
+      message: "Updated contact!",
     },
   });
 };

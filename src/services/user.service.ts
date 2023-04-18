@@ -1,4 +1,8 @@
-import { BadRequestError, UnauthorizedError } from "../helpers/api.errors";
+import {
+  BadRequestError,
+  NotFoundError,
+  UnauthorizedError,
+} from "../helpers/api.errors";
 import { IUser, User } from "../models/user.model";
 import UserRepository from "../repositories/user.repository";
 import bcrypt from "bcrypt";
@@ -7,10 +11,9 @@ import jwt from "jsonwebtoken";
 const secretJWT = process.env.JWT_SECRET_KEY || "";
 
 class UserService {
-  getAll() {
-    return UserRepository.getAll();
+  getById(user_id: string) {
+    return UserRepository.getById(user_id);
   }
-
   getByEmail(email: string) {
     return UserRepository.getByEmail(email);
   }
@@ -26,20 +29,14 @@ class UserService {
       user.password = await bcrypt.hash(user.password, 10);
     }
 
-    const userCreated = await UserRepository.create(user);
-
-    return {
-      id: userCreated?.id,
-      username: userCreated?.username,
-      email: userCreated?.email,
-    };
+    return await UserRepository.create(user);
   }
 
   async authorization(email: string, password: string) {
     const user = await UserRepository.getByEmail(email);
 
     if (!user) {
-      throw new BadRequestError("Email not registered!");
+      throw new NotFoundError("User not found!");
     }
 
     const authentication = await bcrypt.compare(password, user.password);
@@ -53,12 +50,12 @@ class UserService {
     throw new UnauthorizedError("Authentication failed!");
   }
 
-  update(id: string, user: Partial<typeof User>) {
-    return UserRepository.update(id, user);
+  update(user_id: string, user: Partial<typeof User>) {
+    return UserRepository.update(user_id, user);
   }
 
-  delete(id: string) {
-    return UserRepository.delete(id);
+  delete(user_id: string) {
+    return UserRepository.delete(user_id);
   }
 }
 

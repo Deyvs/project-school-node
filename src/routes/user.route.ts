@@ -12,7 +12,7 @@ router.post("/login", UserController.loginUser);
 router.use(validateToken);
 
 router
-  .route("/user/:user_id")
+  .route("/users/:user_id")
   .put(UserController.updateUser)
   .delete(UserController.deleteUser);
 
