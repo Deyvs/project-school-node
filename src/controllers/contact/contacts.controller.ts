@@ -15,6 +15,11 @@ export const getContacts = async (req: Request, res: Response) => {
   if (!user) {
     throw new NotFoundError("User not found!");
   }
+
+  if (user.id !== req.body.user_id_validate) {
+    throw new UnauthorizedError("User is not authorized or token is missing!");
+  }
+
   const contacts = await ContactService.getAll(user_id);
   const userResponse = {
     user_id: user_id,
@@ -121,7 +126,7 @@ export const deleteContact = async (req: Request, res: Response) => {
   }
 
   if (contact.user_id.toString() !== user_id) {
-    throw new UnauthorizedError("Access denied!");
+    throw new UnauthorizedError("Access not authorized!");
   }
 
   await ContactService.delete(req.params.contact_id);
