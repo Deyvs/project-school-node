@@ -1,18 +1,62 @@
 # Contact List
 
----
-
-Aplicação para armazenar lista de contatos.
+Aplicação desenvolvida para criar uma lista de contatos.
 
 ## Tecnologias utlizadas
 
-<li> NodeJs
-<li> Typescript
-<li> ExpressJS
-<li> MongoDB
-<li> Mongoose
-<li> Bcrypt
-<li> Jsonwebtoken
+![NPM](https://img.shields.io/badge/NPM-%23CB3837.svg?style=for-the-badge&logo=npm&logoColor=white)
+![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
+![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)
+![Typesscript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)
+
+## Ferramentas utlizadas
+
+![Insomnia](https://img.shields.io/badge/Insomnia-black?style=for-the-badge&logo=insomnia&logoColor=5849BE)
+![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white)
+
+## Árvore de diretórios
+
+```
+├── Insomnia_2023-04-18.json
+├── Readme.md
+├── package-lock.json
+├── package.json
+├── src
+│   ├── app.ts
+│   ├── config
+│   │   └── db.cnonnection.ts
+│   ├── controllers
+│   │   ├── contact
+│   │   │   ├── contacts.controller.ts
+│   │   │   └── index.ts
+│   │   ├── index.ts
+│   │   └── user
+│   │       ├── index.ts
+│   │       └── user.controller.ts
+│   ├── helpers
+│   │   └── api.errors.ts
+│   ├── middlewares
+│   │   ├── error.handler.ts
+│   │   └── validation.token.handler.ts
+│   ├── models
+│   │   ├── contact.model.ts
+│   │   └── user.model.ts
+│   ├── repositories
+│   │   ├── contact.repository.ts
+│   │   └── user.repository.ts
+│   ├── routes
+│   │   ├── index.ts
+│   │   └── user.route.ts
+│   └── services
+│       ├── contact.service.ts
+│       └── user.service.ts
+└── tsconfig.json
+
+11 directories, 23 files
+```
+
+---
 
 ## Como rodar o projeto?
 
@@ -32,19 +76,25 @@ DATABASE_URL=mongodb://localhost:{PORT_DB}/{NOME_DB} // String de conexão
 JWT_SECRET_KEY={SECRETE_KEY} // Adicionar secret key
 ```
 
-## Endpoints
+## Recursos da Aplicação
 
-### Criar um usuário
+| Endpoints                                                    | Métodos HTTP | Descrição                              |
+| ------------------------------------------------------------ | :----------: | -------------------------------------- |
+| `localhost:{PORT}/api/register`                              |    `POST`    | Criar um usário                        |
+| `localhost:{PORT}/api/login`                                 |    `POST`    | Autenticar um usuário                  |
+| `localhost:{PORT}/api/users/{user_id}`                       |    `PUT`     | Atualizar os dados de um usuário       |
+| `localhost:{PORT}/api/users/{user_id}`                       |   `DELETE`   | Deletar um usuário                     |
+| `localhost:{PORT}/api/users/{user_id}/contacts`              |    `GET`     | Buscar todos os contatos de um usuário |
+| `localhost:{PORT}/api/users/{user_id}/contacts/{contact_id}` |    `GET`     | Buscar um contato de usuário           |
+| `localhost:{PORT}/api/users/{user_id}/contacts`              |    `POST`    | Criar um contato de um usuário         |
+| `localhost:{PORT}/api/users/{user_id}/contacts/{contact_id}` |    `PUT`     | Atualizar um contato de um usuário     |
+| `localhost:{PORT}/api/users/{user_id}/contacts/{contact_id}` |   `DELETE`   | Deletar um contato de um usuário       |
 
-#### Método de requisção
+## Body de Requisição e Resposta
 
-`POST`
+### Criar usuário
 
-#### URL
-
-`localhost:{PORT}/api/register`
-
-#### Body da requisção
+<li> <strong>Requisição<strong> </li>
 
 ```
 {
@@ -54,7 +104,7 @@ JWT_SECRET_KEY={SECRETE_KEY} // Adicionar secret key
 }
 ```
 
-#### Body da resposta
+<li> <strong>Resposta<strong> </li>
 
 ```
 {
@@ -63,41 +113,9 @@ JWT_SECRET_KEY={SECRETE_KEY} // Adicionar secret key
 }
 ```
 
-##### HTTP Status Code: 201 - Created
-
-#### ERRORS
-
-##### HTTP Status Code: 400 - Bad Request
-
-<li>Não é permitido dois ou mais usuários com o mesmo e-amil</li>
-
-```
-{
-	"message": "Email already registered!"
-}
-```
-
-<li>Não é permitido campos vazios</li>
-
-```
-{
-	"message": "All fields are mandatory!"
-}
-```
-
----
-
 ### Login de usuário
 
-#### Método de requisção
-
-`POST`
-
-#### URL
-
-`localhost:{PORT}/api/login`
-
-#### Body da requisção
+<li> <strong>Requisição<strong> </li>
 
 ```
 {
@@ -106,7 +124,7 @@ JWT_SECRET_KEY={SECRETE_KEY} // Adicionar secret key
 }
 ```
 
-#### Body da resposta
+<li> <strong>Resposta<strong> </li>
 
 ```
 {
@@ -117,51 +135,9 @@ JWT_SECRET_KEY={SECRETE_KEY} // Adicionar secret key
 }
 ```
 
-##### HTTP Status Code: 200 - OK
+### Ataulizar usuário
 
-#### ERRORS
-
-<li>Email de usuário não cadastrado</li>
-
-```
-{
-	"message": "User not Found!"
-}
-```
-
-##### HTTP Status Code: 404 - Not Found
-
-<li>Senha errada</li>
-
-```
-{
-	"message": "Authentication failed!"
-}
-```
-
-<li>Falha na autenticação do token</li>
-
-```
-{
-	"message": "Failed on authenticate token."
-}
-```
-
-##### HTTP Status Code: 401 - Unauthorized
-
----
-
-### Atualizar Usuário
-
-#### Método de requisção
-
-`PUT`
-
-#### URL
-
-`localhost:{PORT}/api/users/{user_id}`
-
-#### Body da requisção
+<li> <strong>Requisição<strong> </li>
 
 ```
 {
@@ -169,117 +145,29 @@ JWT_SECRET_KEY={SECRETE_KEY} // Adicionar secret key
 }
 ```
 
-#### Body da resposta
+<li> <strong>Resposta<strong> </li>
 
 ```
 {
 	"status": 200,
-	"data": {
-		"message": "Updated User!"
-	}
+	"message": "Updated user!"
 }
 ```
 
-##### HTTP Status Code: 200 - OK
+### Deletar usuário
 
-#### ERRORS
-
-<li>Email de usuário não cadastrado</li>
-
-```
-{
-	"message": "User not Found!"
-}
-```
-
-##### HTTP Status Code: 404 - Not Found
-
-<li>Token expirado ou inválido</li>
-
-```
-{
-	"message": "User is not authorized or token is missing!"
-}
-```
-
-<li>Falha na autenticação do token</li>
-
-```
-{
-	"message": "Failed on authenticate token."
-}
-```
-
-##### HTTP Status Code: 401 - Unauthorized
-
----
-
-### Deletar Usuário
-
-#### Método de requisção
-
-`DELETE`
-
-#### URL
-
-`localhost:{PORT}/api/users/{user_id}`
-
-#### Body da resposta
+<li> <strong>Resposta<strong> </li>
 
 ```
 {
 	"status": 200,
-	"data": {
-		"message": "Deleted User!"
-	}
+	"message": "Deleted user!"
 }
 ```
 
-##### HTTP Status Code: 200 - OK
+### Buscar contatos de um usuário
 
-#### ERRORS
-
-<li>Email de usuário não cadastrado</li>
-
-```
-{
-	"message": "User not Found!"
-}
-```
-
-##### HTTP Status Code: 404 - Not Found
-
-<li>Token expirado ou inválido</li>
-
-```
-{
-	"message": "User is not authorized or token is missing!"
-}
-```
-
-<li>Falha na autenticação do token</li>
-
-```
-{
-	"message": "Failed on authenticate token."
-}
-```
-
-##### HTTP Status Code: 401 - Unauthorized
-
----
-
-### Buscar todos os Contatos de um Usuário
-
-#### Método de requisção
-
-`GET`
-
-#### URL
-
-`localhost:{PORT}/api/users/{user_id}/contacts`
-
-#### Body da resposta
+<li> <strong>Resposta<strong> </li>
 
 ```
 {
@@ -310,51 +198,9 @@ JWT_SECRET_KEY={SECRETE_KEY} // Adicionar secret key
 }
 ```
 
-##### HTTP Status Code: 200 - OK
+### Buscar contatos de um usuário pelo ID
 
-#### ERRORS
-
-<li>Email de usuário não cadastrado</li>
-
-```
-{
-	"message": "User not Found!"
-}
-```
-
-##### HTTP Status Code: 404 - Not Found
-
-<li>Token expirado ou inválido</li>
-
-```
-{
-	"message": "User is not authorized or token is missing!"
-}
-```
-
-<li>Falha na autenticação do token</li>
-
-```
-{
-	"message": "Failed on authenticate token."
-}
-```
-
-##### HTTP Status Code: 401 - Unauthorized
-
----
-
-### Buscar um Contato de um Usuário por ID
-
-#### Método de requisção
-
-`GET`
-
-#### URL
-
-`localhost:{PORT}/api/users/{user_id}/contacts/{contact_id}`
-
-#### Body da resposta
+<li> <strong>Resposta<strong> </li>
 
 ```
 {
@@ -375,59 +221,9 @@ JWT_SECRET_KEY={SECRETE_KEY} // Adicionar secret key
 }
 ```
 
-##### HTTP Status Code: 200 - OK
+### Criar um contato
 
-#### ERRORS
-
-<li>Contato não cadastrado</li>
-
-```
-{
-	"message": "Contact not Found!"
-}
-```
-
-<li>Email de usuário não cadastrado</li>
-
-```
-{
-	"message": "User not Found!"
-}
-```
-
-##### HTTP Status Code: 404 - Not Found
-
-<li>Token expirado ou inválido</li>
-
-```
-{
-	"message": "User is not authorized or token is missing!"
-}
-```
-
-<li>Falha na autenticação do token</li>
-
-```
-{
-	"message": "Failed on authenticate token."
-}
-```
-
-##### HTTP Status Code: 401 - Unauthorized
-
----
-
-### Criar um Contato para um Usuário
-
-#### Método de requisção
-
-`POST`
-
-#### URL
-
-`localhost:{PORT}/api/users/{user_id}/contacts`
-
-#### Body da requisção
+<li> <strong>Requisição<strong> </li>
 
 ```
 {
@@ -438,70 +234,18 @@ JWT_SECRET_KEY={SECRETE_KEY} // Adicionar secret key
 }
 ```
 
-#### Body da resposta
+<li> <strong>Resposta<strong> </li>
 
 ```
 {
-	"status": 200,
-	"data": {
-		"message": "Updated contact!"
-	}
+	"status": 201,
+	"message": "Created contact!"
 }
 ```
 
-##### HTTP Status Code: 200 - OK
+### Ataulizar um contato
 
-#### ERRORS
-
-<li>Contato não cadastrado</li>
-
-```
-{
-	"message": "Contact not Found!"
-}
-```
-
-<li>Email de usuário não cadastrado</li>
-
-```
-{
-	"message": "User not Found!"
-}
-```
-
-##### HTTP Status Code: 404 - Not Found
-
-<li>Token expirado ou inválido</li>
-
-```
-{
-	"message": "User is not authorized or token is missing!"
-}
-```
-
-<li>Falha na autenticação do token</li>
-
-```
-{
-	"message": "Failed on authenticate token."
-}
-```
-
-##### HTTP Status Code: 401 - Unauthorized
-
----
-
-### Atualizar um Contato de um Usuário por ID
-
-#### Método de requisção
-
-`PUT`
-
-#### URL
-
-`localhost:{PORT}/api/users/{user_id}/contacts/{contact_id}`
-
-#### Body da requisção
+<li> <strong>Requisição<strong> </li>
 
 ```
 {
@@ -509,44 +253,53 @@ JWT_SECRET_KEY={SECRETE_KEY} // Adicionar secret key
 }
 ```
 
-#### Body da resposta
+<li> <strong>Resposta<strong> </li>
 
 ```
 {
 	"status": 200,
-	"data": {
-		"message": "Updated contact!"
-	}
+	"message": "Updated contact!"
 }
 ```
 
-##### HTTP Status Code: 200 - OK
+### Deletar um contato
 
-#### ERRORS
-
-<li>Contato não cadastrado</li>
+<li> <strong>Resposta<strong> </li>
 
 ```
 {
-	"message": "Contact not Found!"
+	"status": 200,
+	"message": "Deleted user!"
 }
 ```
 
-<li>Email de usuário não cadastrado</li>
+## Erros
+
+### HTTP Status Code: 400 - Bad Request
+
+<li>Não é permitido dois ou mais usuários com o mesmo e-amil</li>
 
 ```
 {
-	"message": "User not Found!"
+	"message": "Email already registered!"
 }
 ```
 
-##### HTTP Status Code: 404 - Not Found
-
-<li>Token expirado ou inválido</li>
+<li>Não é permitido campos vazios</li>
 
 ```
 {
-	"message": "User is not authorized or token is missing!"
+	"message": "All fields are mandatory!"
+}
+```
+
+### HTTP Status Code: 401 - Unauthorized
+
+<li>Senha errada</li>
+
+```
+{
+	"message": "Authentication failed!"
 }
 ```
 
@@ -558,70 +311,25 @@ JWT_SECRET_KEY={SECRETE_KEY} // Adicionar secret key
 }
 ```
 
-##### HTTP Status Code: 401 - Unauthorized
+<li>Token expirado ou inválido</li>
+
+```
+{
+	"message": "User is not authorized or token is missing!"
+}
+```
+
+### HTTP Status Code: 404 - Not Found
+
+<li>Email de usuário não cadastrado</li>
+
+```
+{
+	"message": "User not Found!"
+}
+```
 
 ---
-
-### Deletar um Contato de um Usuário por ID
-
-#### Método de requisção
-
-`PUT`
-
-#### URL
-
-`localhost:{PORT}/api/users/{user_id}/contacts/{contact_id}`
-
-#### Body da resposta
-
-```
-{
-	"status": 200,
-	"data": {
-		"message": "Deleted contact!"
-	}
-}
-```
-
-##### HTTP Status Code: 200 - OK
-
-#### ERRORS
-
-<li>Contato não cadastrado</li>
-
-```
-{
-	"message": "Contact not Found!"
-}
-```
-
-<li>Email de usuário não cadastrado</li>
-
-```
-{
-	"message": "User not Found!"
-}
-```
-
-##### HTTP Status Code: 404 - Not Found
-
-<li>Token expirado ou inválido</li>
-
-```
-{
-	"message": "User is not authorized or token is missing!"
-}
-```
-
-<li>Falha na autenticação do token</li>
-
-```
-{
-	"message": "Failed on authenticate token."
-}
-```
-
-##### HTTP Status Code: 401 - Unauthorized
 
 ## Futuras melhorias
 
