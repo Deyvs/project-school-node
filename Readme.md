@@ -10,6 +10,8 @@ Clonar o projeto: `git clone git@github.com:Deyvs/project-school-node.git`
 
 Instalar as dependências do através do comando: `npm install`
 
+Configurar variáveis de ambiente e a string de conexão com o DB
+
 Rodar a aplicação com o comando:`npm start`
 
 ## Variáveis de ambiente
