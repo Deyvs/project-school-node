@@ -4,6 +4,16 @@
 
 Aplicação para armazenar lista de contatos.
 
+## Tecnologias utlizadas
+
+<li> NodeJs
+<li> Typescript
+<li> ExpressJS
+<li> MongoDB
+<li> Mongoose
+<li> Bcrypt
+<li> Jsonwebtoken
+
 ## Como rodar o projeto?
 
 Clonar o projeto: `git clone git@github.com:Deyvs/project-school-node.git`
