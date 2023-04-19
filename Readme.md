@@ -56,8 +56,6 @@ Aplicação desenvolvida para criar uma lista de contatos.
 11 directories, 23 files
 ```
 
----
-
 ## Como rodar o projeto?
 
 Clonar o projeto: `git clone git@github.com:Deyvs/project-school-node.git`
@@ -337,10 +335,9 @@ JWT_SECRET_KEY={SECRETE_KEY} // Adicionar secret key
 }
 ```
 
----
-
 ## Futuras melhorias
 
 <li> Implementar Logs 
 <li> Impplementar Testes
 <li> Filtros para buscas personalizadas
+<li> Disparo de emails e mensagens para grupo de pessoas
