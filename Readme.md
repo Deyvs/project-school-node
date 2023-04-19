@@ -329,6 +329,14 @@ JWT_SECRET_KEY={SECRETE_KEY} // Adicionar secret key
 }
 ```
 
+<li>Contato não cadastrado</li>
+
+```
+{
+	"message": "Contact not Found!"
+}
+```
+
 ---
 
 ## Futuras melhorias
